@@ -34,30 +34,26 @@
                     </el-form-item>
                     <el-form-item label="Who's allowed?">
                         <el-checkbox-group v-model="form.gender">
-                            <span v-for="gender in genders"><el-checkbox :label="gender.title" style="padding-left: 3px; padding-right: 3px"></el-checkbox><icon  style="padding-left: 3px; padding-right: 6px":name="gender.icon"></icon></span>
+                            <span v-for="gender in genders"><el-checkbox :label="gender.title" style="padding-left: 3px; padding-right: 3px"></el-checkbox><icon  style="padding-left: 3px; padding-right: 6px" :name="gender.icon"></icon></span>
                         </el-checkbox-group>
                     </el-form-item>
-                    <el-form-item label="Special needs?">
-                        
+                    <el-form-item label="Special needs?">                        
                         <el-checkbox-group v-model="form.specials">
                             <span v-for="special in specials"><el-checkbox :label="special.title" style="padding-left: 3px; padding-right: 3px"></el-checkbox><icon style="padding-left: 3px; padding-right: 3px" :name="special.icon"></icon></span>              
-                        </el-checkbox-group>
-                        
-                    </el-form-item>
-                    
-                </el-form>
-                
+                        </el-checkbox-group>                        
+                    </el-form-item>                    
+                </el-form>                
             </div>
-            <el-button type="primary" @click="toiletModal=true">Add toilet</el-button>
-            <el-dialog v-model="toiletModal">
+            <el-button type="primary" @click="toiletModal=true"><icon name="plus"></icon> Add Loo </el-button>
+            <el-dialog v-model="toiletModal"   title="Add a Loo">
                 <el-form ref="form" :model="newToilet" label-width="120px">
-                    <el-form-item  label="nickname">
+                    <el-form-item  label="Nickname">
                         <el-input v-model="newToilet.nickname"></el-input>
                     </el-form-item>
                     <el-form-item label="Rating">
-                        <el-rate void-color="white" v-model="newToilet.rating"></el-rate>
+                        <el-rate void-color="black" v-model="newToilet.rating"></el-rate>
                     </el-form-item>
-                    <el-form-item label="Pay?">
+                    <el-form-item label="Pay toilet?">
                         <el-switch
                             v-model="newToilet.payBool"
                             active-text="pay toilets"
@@ -76,6 +72,16 @@
                         </el-checkbox-group>
                         
                     </el-form-item>
+                    <el-form-item label="Comments:">
+                        
+                        <el-input v-model="newToilet.comments"
+                                  type="textarea"
+                                  placeholder="Share your thoughts about this toilet."
+                        >
+                            
+                        </el-input>
+                        
+                    </el-form-item>                    
                     <!--
                          <el-form-item label="Picture">
                          <el-upload
@@ -107,9 +113,18 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="Results">
-                    <el-card v-for="toilet in toilets">
-                        {{ toilet.nickname }}
-                        
+                    <el-card v-for="toilet in toilets" style="margin: 10px">
+                        <div slot="header" class="clearfix">
+                            <span>{{ toilet.nickname }}</span>
+                            <el-button style="float: right;" type="text"><icon name="plus-circle"></icon> My Loos</el-button>
+                        </div>
+                        <el-rate
+                            v-model="toilet.rating"
+                            disabled
+                            show-score
+                            text-color="#ff9900"
+                        ></el-rate>
+                        <p>{{ toilet.comments }}</p>
                     </el-card>
                 </el-tab-pane>
                 
@@ -159,6 +174,7 @@
              
              newToilet: {
                  nickname: '',
+                 comments: '',
                  payBool: false,
                  gender: '',
                  specials: [],
@@ -198,7 +214,7 @@
                      
                  },
                  {
-                     title: 'Trans',
+                     title: 'Unisex',
                      icon: 'intersex'
                      
                  }
