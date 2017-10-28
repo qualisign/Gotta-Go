@@ -10,6 +10,7 @@
             </el-col>
             </el-row>
             <div class="finder">
+                
                 <div>                   
                     <el-form-item label="Location">
                         <el-input placeholder="find your restroom"></el-input>
@@ -45,14 +46,13 @@
                     </el-form-item>
                     
                 </el-form>
-                <div>this is the toilets object located in firebase: {{ toilets }}</div><br>
-                <div>this is the data of the form that will be pushed to toilets: {{ form }}</div>
+                
             </div>
             <el-button type="primary" @click="toiletModal=true">Add toilet</el-button>
             <el-dialog v-model="toiletModal">
                 <el-form ref="form" :model="newToilet" label-width="120px">
-                    <el-form-item label="Distance">
-                        <el-slider v-model="newToilet.distance"></el-slider>
+                    <el-form-item  label="nickname">
+                        <el-input v-model="newToilet.nickname"></el-input>
                     </el-form-item>
                     <el-form-item label="Rating">
                         <el-rate void-color="white" v-model="newToilet.rating"></el-rate>
@@ -76,20 +76,23 @@
                         </el-checkbox-group>
                         
                     </el-form-item>
-                    <el-form-item label="Picture">
-                        <el-upload
-                            class="upload-demo"
-                            drag                            
-                            :file-list="fileList"
-                            multiple>
-                            <i class="el-icon-upload"></i>
-                            <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
-                            <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
-                        </el-upload>
-                    </el-form-item>
+                    <!--
+                         <el-form-item label="Picture">
+                         <el-upload
+                         class="upload-demo"
+                         drag                            
+                         :file-list="fileList"
+                         multiple>
+                         <i class="el-icon-upload"></i>
+                         <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+                         <div class="el-upload__tip" slot="tip">jpg/png files with a size less than 500kb</div>
+                         </el-upload>
+                         </el-form-item>
+
+                       -->
                     
                 </el-form>
-                <el-button @click="addToilet()">SAVE TOILET</el-button>
+                <el-button type="success" @click="addToilet()">SAVE TOILET</el-button>
             </el-dialog>
             
         </div>
@@ -103,9 +106,13 @@
                     </v-map>
                     </div>
                 </el-tab-pane>
-                <el-tab-pane label="Config">Config</el-tab-pane>
-                <el-tab-pane label="Role">Role</el-tab-pane>
-                <el-tab-pane label="Task">Task</el-tab-pane>
+                <el-tab-pane label="Results">
+                    <el-card v-for="toilet in toilets">
+                        {{ toilet.nickname }}
+                        
+                    </el-card>
+                </el-tab-pane>
+                
             </el-tabs>
         </div>
     </div>
@@ -134,10 +141,12 @@
          'v-marker': Vue2Leaflet.Marker         
 
      },
-     firebase: function(){
-         toilets: toiletsRef
+     firebase(){
+         return {
+             toilets: toiletsRef
+             }
 
-     },
+     },     
      data (){
          return {
              
@@ -147,7 +156,9 @@
              attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
              marker: L.latLng(47.413220, -1.219482),
              toiletModal: false,
+             
              newToilet: {
+                 nickname: '',
                  payBool: false,
                  gender: '',
                  specials: [],
@@ -202,7 +213,7 @@
          },
          addToilet: function(){
              var self=this;
-             this.toilets.push(this.newToilet).then(function(snapshot){
+             db.ref('toilets').push(self.newToilet).then(function(snapshot){
 
                  // firebase returns promises with info about the changes you made to the database.
                  // on success...
