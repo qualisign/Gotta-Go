@@ -1,50 +1,55 @@
 <template>
     <div id="app" >
         <div class="sidebar" style="background: #B4DDDD">
-            <el-row :gutter="24">
-            <el-col :span="16">
-                <span style="height: 50%; width: 50%"><img src="../static/SchuhLogo.svg"></img></span>
-            </el-col>
-            <el-col :span="8">
-                <span style="text-align: left"><h1>Find<br>My<br>Loo!</h1></span>
-            </el-col>
-            </el-row>
-            <div class="finder">
+            <div class="side-header">
                 
-                <div>                   
-                    <el-form-item label="Location">
-                        <el-input placeholder="find your restroom"></el-input>
-                    </el-form-item>
+                <div><span><img height="100%" width="100%" src="../static/FindYourLooFont.png"></img></span></div>
+                
+                
+                <div><span style="height: 50%; width: 50%; padding-right: 20px"><img src="../static/SchuhLogo.svg"></img></span></div>
+                
+                
+                
+                
+            </div>
+            <div class="filters" style="padding: 20px; padding-top: 0px">
+                
+                <el-card>
+                    <el-form ref="form" :model="form" label-width="120px">
+                        <el-form-item label="Distance">
+                            <el-slider v-model="form.distance"></el-slider>
+                        </el-form-item>
+                        <el-form-item label="Rating">
+                            <el-rate void-color="white" v-model="form.rating"></el-rate>
+                        </el-form-item>
+                        <el-form-item label="Pay?">
+                            <el-switch
+                                v-model="form.payBool"
+                                active-text="pay toilets"
+                                inactive-text="only free toilets">
+                            </el-switch>
+                        </el-form-item>
+                        <el-form-item label="Who's allowed?">
+                            <el-checkbox-group v-model="form.gender">
+                                <span v-for="gender in genders"><el-checkbox :label="gender.title" style="padding-left: 3px; padding-right: 3px"></el-checkbox><icon  style="padding-left: 3px; padding-right: 6px" :name="gender.icon"></icon></span>
+                            </el-checkbox-group>
+                        </el-form-item>
+                        <el-form-item label="Special needs?">                        
+                            <el-checkbox-group v-model="form.specials">
+                                <span v-for="special in specials"><el-checkbox :label="special.title" style="padding-left: 3px; padding-right: 3px"></el-checkbox><icon style="padding-left: 3px; padding-right: 3px" :name="special.icon"></icon></span>              
+                            </el-checkbox-group>                        
+                        </el-form-item>                    
+                    </el-form>
+                </el-card>
+                
+                <div style="display: flex; justify-content: space-between; padding: 5px; ">
+                    <div style="flex: 2"><el-button><img src="../static/Loo-Man.svg" height="40%" width="40%"></img><br>Join the club</el-button></div>
+                    <div style="flex: 2"><el-button @click="toiletModal=true"><img style="color: white" height="40%" width="40%" src="../static/KlobuersteIcon.svg"></img> <br>Add a Loo </el-button></div>
+                    
+                    
                 </div>
             </div>
-            <div class="filters" style="padding: 20px">
-                <el-form ref="form" :model="form" label-width="120px">
-                    <el-form-item label="Distance">
-                        <el-slider v-model="form.distance"></el-slider>
-                    </el-form-item>
-                    <el-form-item label="Rating">
-                        <el-rate void-color="white" v-model="form.rating"></el-rate>
-                    </el-form-item>
-                    <el-form-item label="Pay?">
-                        <el-switch
-                            v-model="form.payBool"
-                            active-text="pay toilets"
-                            inactive-text="only free toilets">
-                        </el-switch>
-                    </el-form-item>
-                    <el-form-item label="Who's allowed?">
-                        <el-checkbox-group v-model="form.gender">
-                            <span v-for="gender in genders"><el-checkbox :label="gender.title" style="padding-left: 3px; padding-right: 3px"></el-checkbox><icon  style="padding-left: 3px; padding-right: 6px" :name="gender.icon"></icon></span>
-                        </el-checkbox-group>
-                    </el-form-item>
-                    <el-form-item label="Special needs?">                        
-                        <el-checkbox-group v-model="form.specials">
-                            <span v-for="special in specials"><el-checkbox :label="special.title" style="padding-left: 3px; padding-right: 3px"></el-checkbox><icon style="padding-left: 3px; padding-right: 3px" :name="special.icon"></icon></span>              
-                        </el-checkbox-group>                        
-                    </el-form-item>                    
-                </el-form>                
-            </div>
-            <el-button type="primary" @click="toiletModal=true"><icon name="plus"></icon> Add Loo </el-button>
+                
             <el-dialog v-model="toiletModal"   title="Add a Loo">
                 <el-form ref="form" :model="newToilet" label-width="120px">
                     <el-form-item  label="Nickname">
@@ -102,14 +107,14 @@
             </el-dialog>
             
         </div>
-        <div class="results" >
+        <div class="results" style="overflow: auto">
             <el-tabs type="card">
                 <el-tab-pane label="Map">
                     <div style="height: 100%" class="map-container">
-                    <v-map class="mini-map" :zoom=13 :center="[47.413220, -1.219482]" :style="{height: '1000px'}">
-                        <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
-                        <v-marker :lat-lng="[47.413220, -1.219482]"></v-marker>
-                    </v-map>
+                        <v-map class="mini-map" :zoom=13 :center="[47.413220, -1.219482]" :style="{height: '1000px'}">
+                            <v-tilelayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></v-tilelayer>
+                            <v-marker :lat-lng="[47.413220, -1.219482]"></v-marker>
+                        </v-map>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="Results">
@@ -159,7 +164,7 @@
      firebase(){
          return {
              toilets: toiletsRef
-             }
+         }
 
      },
      computed: {
@@ -295,6 +300,10 @@
      position: absolute;
      left: 0px;
  }
- 
+
+ .side-header {
+     display: flex;
+     justify-content: space-evenly;
+ }
 
 </style>
