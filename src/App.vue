@@ -1,21 +1,17 @@
-<template>
-    <div id="app" >
+<template>    
+    <div id="app" >        
         <div class="sidebar" style="background: #B4DDDD">
-            <div class="side-header">
-                
-                <div><span><img height="100%" width="100%" src="../static/FindYourLooFont.png"></img></span></div>
-                
-                
-                <div><span style="height: 50%; width: 50%; padding-right: 20px"><img src="../static/SchuhLogo.svg"></img></span></div>
-                
-                
-                
-                
+            <div class="side-header">                
+                <div><span><img height="100%" width="100%" src="../static/FindYourLooFont.png"></img></span></div>                               
+                <div><span style="height: 50%; width: 50%; padding-right: 20px"><img src="../static/SchuhLogo.svg"></img></span></div>                              
             </div>
             <div class="filters" style="padding: 20px; padding-top: 0px">
                 
                 <el-card>
                     <el-form ref="form" :model="form" label-width="120px">
+                        <el-form-item label="Location">                            
+                            <el-input id="address-input"></el-input>
+                        </el-form-item>                        
                         <el-form-item label="Distance">
                             <el-slider v-model="form.distance"></el-slider>
                         </el-form-item>
@@ -104,6 +100,7 @@
                     
                 </el-form>
                 <el-button type="success" @click="addToilet()">SAVE TOILET</el-button>
+                <button @click="tryAuth">try auth</button>
             </el-dialog>
             
         </div>
@@ -122,6 +119,7 @@
                         <div slot="header" class="clearfix">
                             <span>{{ toilet.nickname }}</span>
                             <el-button style="float: right;" type="text"><icon name="plus-circle"></icon> My Loos</el-button>
+                            
                         </div>
                         <el-rate
                             v-model="toilet.rating"
@@ -140,17 +138,19 @@
 
 <script>
 
+  
  import app from './db.js'
  var db = app.database()
  var storagae = app.storage()
  var usersRef = db.ref('users')
  var toiletsRef = db.ref('toilets')
+ var auth = app.auth()
  
  import HelloWorld from './components/HelloWorld'
  import Icon from 'vue-awesome/components/Icon'
  import L from 'leaflet'
  import Vue2Leaflet from 'vue2-leaflet'
- 
+
  
  export default {
      name: 'app',
@@ -172,13 +172,6 @@
              // this function should return a shortened version of the comment in case the comment is too long (plus an ellipsis ...)
              // you can reference the comment like this: this.newToilet.comments
              // if it's not too long, just return the comment
-
-
-
-
-
-             
-
          },
      },
      data (){
@@ -245,6 +238,14 @@
          getDistanceToNextBathroom: function(){
 
              
+         },
+         createUser: function(){
+             app.auth().createUserWithEmailAndPassword('vdd@gmail.com', '23rjfqlfj23aDE').catch(function(error) {
+                 // Handle Errors here.
+                 var errorCode = error.code;
+                 var errorMessage = error.message;
+                 // ...
+             });             
          },
          addToilet: function(){
              var self=this;

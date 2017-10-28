@@ -17,6 +17,7 @@
     "firebase": "^4.6.0",
     "geocomplete": "^1.7.0",
     "geolocation": "^0.2.0",
+    "jquery": "^3.2.1",
     "leaflet": "^1.2.0",
     "vue": "^2.5.2",
     "vue-awesome": "^2.3.3",
