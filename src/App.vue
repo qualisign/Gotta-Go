@@ -66,11 +66,18 @@
 </template>
 
 <script>
+
+ import app from './db.js'
+ var db = app.database()
+ var storagae = app.storage()
+ var usersRef = db.ref('users')
+ var toiletsRef = db.ref('toilets')
+ 
  import HelloWorld from './components/HelloWorld'
  import Icon from 'vue-awesome/components/Icon'
  import L from 'leaflet'
  import Vue2Leaflet from 'vue2-leaflet'
-
+ var toiletsRef = 
  
  export default {
      name: 'app',
@@ -81,7 +88,10 @@
          'v-marker': Vue2Leaflet.Marker         
 
      },
+     firebase: function(){
+         toilets: toiletsRef
 
+     },
      data (){
          return {
              zoom:13,
@@ -94,7 +104,11 @@
                  gender: '',
                  specials: [],
                  rating: 0,
-                 distance: 0
+                 lat: '',
+                 lng: '',
+                 condoms: '',
+                 toothbrush: ''
+                 
              },
              created(){
                  initlializeMap();
@@ -135,6 +149,14 @@
          getDistanceToNextBathroom: function(){
 
              
+         },
+         addToilet: function(){
+
+             this.toilets.push(this.form).then(function(snapshot){
+
+                 // firebase returns promises with info about the changes you made to the database.
+          
+             })
          }
          
      }
