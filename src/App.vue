@@ -161,7 +161,21 @@
              toilets: toiletsRef
              }
 
-     },     
+     },
+     computed: {
+         shortenedComment: function(){
+             // this function should return a shortened version of the comment in case the comment is too long (plus an ellipsis ...)
+             // you can reference the comment like this: this.newToilet.comments
+             // if it's not too long, just return the comment
+
+
+
+
+
+             
+
+         },
+     },
      data (){
          return {
              
